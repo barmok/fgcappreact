@@ -5,7 +5,7 @@ import { SignUpLink } from './SignUp';
 import {PasswordForgetLink} from './PasswordForget';
 import {auth} from '../../firebase';
 import * as routes from '../../constants/routes'
-import {db} from '../../firebase';
+
 
 const SignInPage = ({history}) =>
 <AuthUserContext.Consumer>
@@ -37,7 +37,7 @@ const SignInPage = ({history}) =>
 
       this.state = { ...INITIAL_STATE };
     }
-    
+
 
     onSubmit = (event) => {
       const {
@@ -58,6 +58,7 @@ const SignInPage = ({history}) =>
 
 
         history.push(routes.HOME);
+        window.location.reload();
       })
       .catch(error =>{
         this.setState(byPropKey('error', error));

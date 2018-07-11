@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {BrowserRouter as Router, Route} from 'react-router-dom'
+import AuthUserContext from './AuthUserContext';
 import {firebase} from '../firebase'
 import LandingPage from './pages/Landing';
 import SignUpPage from './pages/SignUp';
@@ -14,18 +15,38 @@ import Navigation from '../Navigation';
 import * as routes from '../constants/routes';
 import withAuthentication from './withAuthentication';
 import Title from './Title';
+import ManageUsersPage from './pages/ManageUser'
 
+import UserMenuClass from './UserMenu'
 
-const AppNav = () =>
+class AppNav extends React.Component {
+
+  constructor(props){
+    super(props);
+  }
+
+  render(){
+    return(
 <Router>
+
   <div>
-      <Title />
+  <div id="layout" className="demo-layout-transparent mdl-layout mdl-js-layout">
+  <div className="mdl-layout__drawer">
+  <UserMenuClass />
+  </div>
+  </div>
+  <Title />
 
-
+    <main className="mdl-layout__content">
     <Route
       exact path={routes.HOME}
       component={() => <div>
-      <HomePage /></div>}
+
+
+      <HomePage />
+
+
+      </div>}
     />
     <Route
       exact path={routes.ADMIN}
@@ -57,10 +78,16 @@ const AppNav = () =>
       exact path={routes.HOMEWORK}
       component={() => <HomeworkPage />}
     />
-
+    <Route
+      exact path={routes.MANAGEUSERS}
+      component={() => <ManageUsersPage />}
+    />
+    </main>
     </div>
-</Router>
+</Router>)
+}
+}
 
 
 
-  export default withAuthentication(AppNav);
+  export default AppNav;

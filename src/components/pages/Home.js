@@ -1,11 +1,10 @@
 import React, {Component} from 'react';
-import {withRouter} from 'react-router-dom';
 import AuthUserContext from '../AuthUserContext';
 import { Link } from 'react-router-dom';
 import * as routes from '../../constants/routes';
 import SignOutButton from './SignOut';
 import withAuthorization from '../withAuthorization';
-import {db} from '../../firebase';
+import {db, firebase} from '../../firebase';
 
 
 
@@ -15,10 +14,15 @@ class HomePage extends Component {
 
 
     this.state = {
+      authUser: null,
       users: null,
     };
+
   }
   componentDidMount() {
+    firebase.auth.onAuthStateChanged(authUser =>
+      {
+        this.state.authUser = authUser})
 
   }
 
@@ -26,9 +30,25 @@ class HomePage extends Component {
     const{
       history,
     } = this.props;
+    <AuthUserContext.Consumer>
+    {
+
+      authUser => authUser ?
+      this.state.authUser = authUser
+        :null
+      }
+    </AuthUserContext.Consumer>
+
     db.onceGetUsers().then(snapshot =>
       this.setState(() => ({ users: snapshot.val() }))
     );
+    if(this.state.users && this.state.authUser)
+    {
+    Object.keys(this.state.users).map(key =>{
+    this.state.authUser.email===this.state.users[key].email?
+      this.state.authUser.role=this.state.users[key].role
+      :null})
+    }
     const { users } = this.state;
     return (
       <div>
@@ -73,8 +93,9 @@ const Content = ({history}) =>
 
   const AdminMenu = () =>
   <div>
+
     <br/><br/>
-    <Link to={routes.ACCOUNT}><button type="submit" className="mdl-button mdl-js-button mdl-button--raised hidden" id="quickstart-sign-up" name="signup">Register</button></Link>
+    <Link to={routes.ACCOUNT}><button type="submit" className="mdl-button mdl-js-button mdl-button--raised" id="quickstart-account" name="account">Account</button></Link>
     <br/><br/>
     <Link to={routes.ADMIN}><button type="submit" className="mdl-button mdl-js-button mdl-button--raised" id="admin" name="admin">Admin</button></Link>
     &nbsp;&nbsp;&nbsp;
@@ -85,6 +106,12 @@ const Content = ({history}) =>
 
   const TherapistMenu = () =>
   <div>
+  <div class="mdl-layout__drawer">
+  <nav className="mdl-navigation">
+        <a className="mdl-navigation__link" href={routes.ACCOUNT}>Account</a>
+        <a className="mdl-navigation__link" href={routes.CONVERSATION}>Account</a>
+  </nav>
+  </div>
     <br/><br/>
     <Link to={routes.CONVERSATION}><button type="submit" className="mdl-button mdl-js-button mdl-button--raised" id="emailTherapist" name="emailToTherapist">&nbsp;Conversation with therapist&nbsp;</button></Link>
     <br/><br/>
@@ -101,7 +128,6 @@ const UserList = ({ users }) =>
 { authUser =>
 
 
-
   <div>
     <h2>List of module completed of {authUser.email}</h2>
     <p> (Saved on Sign Up in Firebase Database)</p>
@@ -109,7 +135,7 @@ const UserList = ({ users }) =>
     {Object.keys(users).map(key =>
       <div key={key}>{users[key].username}  {users[key].role}
       {authUser.email===users[key].email?
-      authUser.role=users[key].role
+      null
       :null}
       </div>
     )}

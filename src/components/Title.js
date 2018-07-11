@@ -15,11 +15,13 @@ const Title = () =>
 
 
       const TitleAuth = () =>
+      <div>
       <div className='mdl-card__title mdl-color--light-blue-600 mdl-color-text--white '>
       <div className='spacer33' />
 
           <h2 className="mdl-card__title-text">FGCApp</h2>
           <SignOutButton />
+      </div>
       </div>
       const TitleNonAuth = () =>
       <div className='mdl-card__title mdl-color--light-blue-600 mdl-color-text--white '>

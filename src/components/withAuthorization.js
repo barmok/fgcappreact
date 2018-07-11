@@ -13,6 +13,7 @@ const withAuthorization = (authCondition) => (Component) => {
           this.props.history.push(routes.SIGN_IN);
         }
       });
+
     }
 
     render() {
