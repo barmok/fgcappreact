@@ -42,13 +42,20 @@ class HomePage extends Component {
     db.onceGetUsers().then(snapshot =>
       this.setState(() => ({ users: snapshot.val() }))
     );
+    var authUser
     if(this.state.users && this.state.authUser)
     {
     Object.keys(this.state.users).map(key =>{
     this.state.authUser.email===this.state.users[key].email?
       this.state.authUser.role=this.state.users[key].role
-      :null})
+      :null
+      authUser = this.state.authUser
+    })
     }
+
+    <AuthUserContext.Provider value={authUser}>
+    <Component />
+    </AuthUserContext.Provider>
     const { users } = this.state;
     return (
       <div>

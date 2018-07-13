@@ -34,10 +34,7 @@ class UserMenuClass extends Component{
 
 
     }
-  static hideToggle() {
-    var selectorId = document.querySelector('.mdl-layout');
-    selectorId.MaterialLayout.toggleDrawer();
-  }
+
   render()
   {
     if(this.state.authUser)
@@ -61,7 +58,10 @@ class UserMenuClass extends Component{
 }
 
 
-
+function hideToggle() {
+  var selectorId = document.querySelector('.mdl-layout');
+  selectorId.MaterialLayout.toggleDrawer();
+}
 
 const UserMenu = ({history}) =>
         <AuthUserContext.Consumer>
@@ -80,24 +80,24 @@ const UserMenu = ({history}) =>
 
 const PatientMenu = () =>
 <nav className="mdl-navigation">
-      <Link className="mdl-navigation__link" to={routes.HOME} onClick={() => this.hideToggle()} style={{ textDecoration: 'none' }}>Home Page</Link>
-      <Link className="mdl-navigation__link" to={routes.NEXTMODULE} onClick={() => this.hideToggle()} style={{ textDecoration: 'none' }}>Module</Link>
-      <Link className="mdl-navigation__link" to={routes.REVIEWMODULES} onClick={() => this.hideToggle()} style={{ textDecoration: 'none' }}>Review Module</Link>
-      <Link className="mdl-navigation__link" to={routes.CONVERSATION} onClick={() => this.hideToggle()} style={{ textDecoration: 'none' }}>Conversation</Link>
-      <Link className="mdl-navigation__link" to={routes.ACCOUNT} onClick={() => this.hideToggle()} style={{ textDecoration: 'none' }}>Account</Link>
+      <Link className="mdl-navigation__link" to={routes.HOME} onClick={hideToggle()} style={{ textDecoration: 'none' }}>Home Page</Link>
+      <Link className="mdl-navigation__link" to={routes.NEXTMODULE} onClick={hideToggle()} style={{ textDecoration: 'none' }}>Module</Link>
+      <Link className="mdl-navigation__link" to={routes.REVIEWMODULES} onClick={hideToggle()} style={{ textDecoration: 'none' }}>Review Module</Link>
+      <Link className="mdl-navigation__link" to={routes.CONVERSATION} onClick={hideToggle()} style={{ textDecoration: 'none' }}>Conversation</Link>
+      <Link className="mdl-navigation__link" to={routes.ACCOUNT} onClick={hideToggle()} style={{ textDecoration: 'none' }}>Account</Link>
 </nav>
 
 const AdminMenu = () =>
 <nav className="mdl-navigation">
-      <Link className="mdl-navigation__link" to={routes.HOME} onClick={() => this.hideToggle()} style={{ textDecoration: 'none' }}>Home Page</Link>
-      <Link className="mdl-navigation__link" to={routes.ADMIN} onClick={() => this.hideToggle()} style={{ textDecoration: 'none' }} >Admin</Link>
-      <Link className="mdl-navigation__link" to={routes.ACCOUNT} onClick={() => this.hideToggle()} style={{ textDecoration: 'none' }}>Account</Link>
+      <Link className="mdl-navigation__link" to={routes.HOME} onClick={hideToggle()} style={{ textDecoration: 'none' }}>Home Page</Link>
+      <Link className="mdl-navigation__link" to={routes.ADMIN} onClick={hideToggle()} style={{ textDecoration: 'none' }} >Admin</Link>
+      <Link className="mdl-navigation__link" to={routes.ACCOUNT} onClick={hideToggle()} style={{ textDecoration: 'none' }}>Account</Link>
 </nav>
 const TherapistMenu = () =>
 <nav className="mdl-navigation">
-      <Link className="mdl-navigation__link" to={routes.HOME} onClick={() => this.hideToggle()} style={{ textDecoration: 'none' }}>Home Page</Link>
-      <Link className="mdl-navigation__link" to={routes.CONVERSATION} onClick={() => this.hideToggle()} style={{ textDecoration: 'none' }}>Conversation</Link>
-      <Link className="mdl-navigation__link" to={routes.ACCOUNT} onClick={() => this.hideToggle()} style={{ textDecoration: 'none' }}>Account</Link>
+      <Link className="mdl-navigation__link" to={routes.HOME} onClick={hideToggle()} style={{ textDecoration: 'none' }}>Home Page</Link>
+      <Link className="mdl-navigation__link" to={routes.CONVERSATION} onClick={hideToggle()} style={{ textDecoration: 'none' }}>Conversation</Link>
+      <Link className="mdl-navigation__link" to={routes.ACCOUNT} onClick={hideToggle()} style={{ textDecoration: 'none' }}>Account</Link>
 </nav>
 
 
