@@ -29,10 +29,22 @@ display : none;
 .quickstart-user-details-container{
 display : none;
 }
-.logo-container{
-    background : url(../img/logo.jpg);
+.logo-container1{
+
+    background-image : url(../img/logo.jpg);
+    background-repeat: no-repeat, no-repeat;
+    background-size: 300px;
     height: 200px;
     width: 300px;
+    display: inline-block;
+}
+.logo-container2{
+    background-image : url(../img/cottonsLogo.gif);
+    background-repeat: no-repeat, no-repeat;
+    background-size: 300px;
+    height: 200px;
+    width: 300px;
+    display: inline-block;
 }
 .spacer33{
     width : 45%;

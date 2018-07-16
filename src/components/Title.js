@@ -19,7 +19,7 @@ const Title = () =>
       <div className='mdl-card__title mdl-color--light-blue-600 mdl-color-text--white '>
       <div className='spacer33' />
 
-          <h2 className="mdl-card__title-text">FGCApp</h2>
+          <h2 className="mdl-card__title-text">YourYoni</h2>
           <SignOutButton />
       </div>
       </div>

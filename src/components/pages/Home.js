@@ -86,13 +86,12 @@ const Content = ({history}) =>
   const PatientMenu = () =>
   <div>
   <br/><br/>
-    <Link to={routes.REVIEWMODULES}><button type="submit" className="mdl-button mdl-js-button mdl-button--raised" id="reviewModules" name="review">Review Previous Modules</button></Link>
+    <Link to={routes.REVIEWMODULES}><button type="submit" className="mdl-button mdl-js-button mdl-button--raised" id="reviewModules" name="review">Previous Modules</button></Link>
     <br/><br/>
-    <Link to={routes.NEXTMODULE}><button type="submit" className="mdl-button mdl-js-button mdl-button--raised" id="nextModule" name="next">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Start Next Module &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</button></Link>
+    <Link to={routes.NEXTMODULE}><button type="submit" className="mdl-button mdl-js-button mdl-button--raised" id="nextModule" name="next">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Next Module &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</button></Link>
     <br/><br/>
-    <Link to={routes.CONVERSATION}><button type="submit" className="mdl-button mdl-js-button mdl-button--raised" id="emailTherapist" name="emailToTherapist">&nbsp;Conversation with therapist&nbsp;</button></Link>
-    <br/><br/>
-    <Link to={routes.ACCOUNT}><button type="submit" className="mdl-button mdl-js-button mdl-button--raised hidden" id="quickstart-sign-up" name="signup">Register</button></Link>
+    <Link to={routes.CONVERSATION}><button type="submit" className="mdl-button mdl-js-button mdl-button--raised" id="emailTherapist" name="emailToTherapist">&nbsp;Message therapist&nbsp;</button></Link>
+    
     <br/><br/>
     <br/><br/>
     <SignOutButton />
