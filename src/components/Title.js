@@ -17,16 +17,17 @@ const Title = () =>
       const TitleAuth = () =>
       <div>
       <div className='mdl-card__title mdl-color--light-blue-600 mdl-color-text--white '>
-      <div className='spacer33' />
+      <div className='spacer45' />
 
-          <h2 className="mdl-card__title-text">YourYoni</h2>
+          <h2 className="mdl-card__title-text-bold">MyMandorla</h2>
+          <div className='spacer33' />
           <SignOutButton />
       </div>
       </div>
       const TitleNonAuth = () =>
       <div className='mdl-card__title mdl-color--light-blue-600 mdl-color-text--white '>
-      <div className='spacer33' />
-      <h2 className="mdl-card__title-text">FGCApp</h2>
+      <div className='spacer45' />
+      <h2 className="mdl-card__title-text-bold">MyMandorla</h2>
       </div>
 
 export default Title;

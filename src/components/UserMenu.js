@@ -70,7 +70,7 @@ const UserMenu = ({history}) =>
         <AuthUserContext.Consumer>
         {
           authUser => authUser ?
-          authUser.role==='patient'
+          authUser.role==='participant'
           ?<PatientMenu/>
           : authUser.role==='admin'
           ?<AdminMenu/>

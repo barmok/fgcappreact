@@ -3,6 +3,7 @@ export const SIGN_IN = '/';
 export const HOME = '/home';
 export const REVIEWMODULES = '/reviewmodules';
 export const NEXTMODULE = '/nextmodule';
+export const EDITMODULE = '/editmodule';
 export const HOMEWORK = '/homework';
 export const ACCOUNT = '/account/';
 export const PASSWORD_FORGET = '/pw-forget';

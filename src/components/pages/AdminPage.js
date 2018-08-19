@@ -20,6 +20,7 @@ const AdminPage = () =>
 
       <br/><br/>
       <Link to={routes.HOME}><button className="mdl-button mdl-js-button mdl-button--raised" id="mainMenu" name="mainMenuBt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Return To Main Menu &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</button></Link>
+      <br/><br/>
       </div>
     }
     </AuthUserContext.Consumer>

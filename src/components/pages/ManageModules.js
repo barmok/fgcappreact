@@ -20,7 +20,7 @@ const byPropKey = (propertyName, value) => () => ({
 
 
 
-class ManageUsersPage extends Component {
+class ManageModulesPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -40,7 +40,6 @@ class ManageUsersPage extends Component {
     const{
       history,
     } = this.props;
-    var isInvalid = !this.state.wasEditClicked;
 
     <AuthUserContext.Consumer>
     {
@@ -50,10 +49,10 @@ class ManageUsersPage extends Component {
         :null
       }
     </AuthUserContext.Consumer>
-    db.onceGetUsers().then(snapshot =>
-      this.setState(() => ({ users: snapshot.val() }))
+    db.onceGetModules().then(snapshot =>
+      this.setState(() => ({ modules: snapshot.val() }))
     );
-    var authUser
+    var authUser;
     if(this.state.users && this.state.authUser)
     {
     Object.keys(this.state.users).map(key =>{
@@ -63,43 +62,42 @@ class ManageUsersPage extends Component {
       authUser = this.state.authUser
     })
     }
-    const { users } = this.state;
+    const { modules } = this.state;
     return (
       <div>
-        {!!users && <UserList users={users}/>}
+        {!!modules && <ModuleList modules={modules}/>}
         </div>
     )
   }
 };
 
 
-class UserList extends Component {
+class ModuleList extends Component {
   render(){
-    var users = this.props.users;
+    var modules = this.props.modules;
     return(
 <AuthUserContext.Consumer>
 { authUser =>
 
-
-
   <div className="mdl-center">
-    <h2>List of Users</h2>
-    <p> (Saved on Sign Up in Firebase Database)</p>
+    <h2>List of Modules</h2>
+    <p> (Saved in Firebase Database)</p>
     <div className="overflow">
     <table className="fullwidth mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
 
       <thead>
       <tr>
-      <th class="mdl-data-table__cell--non-numeric fullwidth">Username</th>
-      <th class="mdl-data-table__cell--non-numeric fullwidth">Email</th>
-      <th class="mdl-data-table__cell--non-numeric fullwidth">Role</th>
-      <th class="mdl-data-table__cell--non-numeric fullwidth"></th>
+      <th class="mdl-data-table__cell--non-numeric halfWidth">Number</th>
+      <th class="mdl-data-table__cell--non-numeric fullwidth">Name</th>
+      <th class="mdl-data-table__cell--non-numeric fullwidth">YouTube Reference</th>
+      <th class="mdl-data-table__cell--non-numeric fullwidth">Homework</th>
+      <th class="mdl-data-table__cell--non-numeric halfWidth"></th>
     </tr>
     </thead>
     <tbody>
-    {Object.keys(users).map(key =>
+    {Object.keys(modules).map(key =>
 
-      <EditUserForm user={users[key]} ukey={key} />
+      <EditModuleForm module={modules[key]} ukey={key} />
 
 
     )}
@@ -107,24 +105,17 @@ class UserList extends Component {
     </tbody>
     </table>
     </div>
-    <br/><br/>
-    <Link to={routes.ADMIN}><button className="mdl-button mdl-js-button mdl-button--raised" id="adminMenu" name="adminMenuBt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Return To Admin Menu &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</button></Link>
-    <br/><br/>
-    <Link to={routes.HOME}><button className="mdl-button mdl-js-button mdl-button--raised" id="mainMenu" name="mainMenuBt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Return To Main Menu &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</button></Link>
-    <br/><br/>
     </div>
   }
   </AuthUserContext.Consumer>)
 }
 }
 
-  class EditUserForm extends Component {
+  class EditModuleForm extends Component {
     constructor(props){
       super(props);
-    this.state = this.props.user;
-    this.state.key=this.props.ukey;
-
-    this.isInvalid = true;
+    this.state = this.props.module;
+    this.state.id=this.props.ukey;
     }
     saveUser(){
       this.isInvalid = !this.isInvalid;
@@ -150,26 +141,25 @@ class UserList extends Component {
       this.isInvalid = !this.isInvalid;
     }
     render() {
-      const{ username,
-      email,
-      role,
+      const{ textContent,
+      title,
+      videoLink,
     } = this.state;
       return(
     <tr>
-    <td className="mdl-data-table__cell--non-numeric">
+    <td className="mdl-data-table__cell--numeric">
     <input
-      className="mdl-textfield__input minWidth"
+      className="mdl-textfield__input halfWidth"
       disabled={true}
-      value={username}
-      onChange={event => this.setState(byPropKey('username', event.target.value))}
+      value={this.state.id}
       type="text"
-      placeholder="Username"
+      placeholder="moduleNumber"
     /></td>
     <td className="mdl-data-table__cell--non-numeric">
     <input
       className="mdl-textfield__input minWidth"
       disabled={true}
-      value={email}
+      value={title}
       onChange={event => this.setState(byPropKey('email', event.target.value))
         }
 
@@ -177,36 +167,38 @@ class UserList extends Component {
       placeholder="Email Address"
     /> </td>
     <td className="mdl-data-table__cell--non-numeric">
-     <select
-      className="minWidth mdl-textfield__input"
-      disabled={this.isInvalid}
-      value={role}
-      onChange={event => this.setState(byPropKey('role', event.target.value))
-      }
-      type="select"
-      placeholder="Role">
-      <option value="admin"> Admin </option>
-      <option value="participant"> Participant </option>
-      <option value="therapist"> Therapist </option>
-    </select>
-    </td>
-    <td>
-    <button className="mdl-button mdl-js-button mdl-button--raised edit"
-    onClick={
-      () => this.editClicked()
-    }
+    <input
+      className="mdl-textfield__input minWidth"
+      disabled={true}
+      value={videoLink}
+      onChange={event => this.setState(byPropKey('email', event.target.value))
+        }
 
-    disabled={!this.isInvalid} type="button" >
+      type="text"
+      placeholder="YouTube Reference"
+    /> </td>
+    <td className="mdl-data-table__cell--non-numeric">
+    <input
+      className="mdl-textfield__input minWidth"
+      disabled={true}
+      value={"Link to homework"}
+      onChange={event => this.setState(byPropKey('email', event.target.value))
+        }
+
+      type="text"
+      placeholder="YouTube Reference"
+    /> </td>
+    <td>
+    <Link  to={{pathname: routes.EDITMODULE, query: {module: this.state}}}
+
+  >
+    <button className="mdl-button mdl-js-button mdl-button--raised edit"
+
+
+    disabled={false} type="button" >
     Edit
     </button>
-    &nbsp;
-    <button className="mdl-button mdl-js-button mdl-button--raised"
-    onClick={
-      () => this.saveUser()
-    }
-    disabled={this.isInvalid} type="button">
-    Save
-    </button>
+    </Link>
     </td>
     </tr>)
   }
@@ -216,4 +208,4 @@ class UserList extends Component {
 
   const authCondition = (authUser) => !!authUser;
 
-export default withAuthorization(authCondition)(ManageUsersPage);
+export default withAuthorization(authCondition)(ManageModulesPage);

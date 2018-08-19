@@ -33,7 +33,7 @@ const SignUpPage = ({history}) =>
           email,
           passwordOne,
         } = this.state;
-        const role = "patient"
+        const role = "participant"
         const{
           history,
         } = this.props;

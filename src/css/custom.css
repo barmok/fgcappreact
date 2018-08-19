@@ -26,15 +26,45 @@ display : none;
 {
 display : none;
 }
+.signout{
+  align-items: right;
+}
 .quickstart-user-details-container{
 display : none;
 }
+.mdl-data-table td {
+  padding: 5px 5px !important;
+}
+.mdl-data-table{
+white-space:normal !important;
+}
+.mdl-data-table th{
+  text-align: left !important;
+  width: 20%;
+  padding: 5px 5px !important;
+}
+.fullwidth {
+    width: 90% ;
+
+}
+.minWidth{
+  width: 100%;
+  min-width: 65px;
+}
+.halfWidth{
+  width: 5% !important;
+  min-width: 65px;
+}
+.overflow{
+  overflow: scroll;
+}
+
 .logo-container1{
 
     background-image : url(../img/logo.jpg);
     background-repeat: no-repeat, no-repeat;
     background-size: 300px;
-    height: 200px;
+    height: 120px;
     width: 300px;
     display: inline-block;
 }
@@ -42,13 +72,49 @@ display : none;
     background-image : url(../img/cottonsLogo.gif);
     background-repeat: no-repeat, no-repeat;
     background-size: 300px;
-    height: 200px;
+    height: 120px;
     width: 300px;
     display: inline-block;
 }
-.spacer33{
-    width : 45%;
+.module-text{
+  text-align: left;
 }
+.italic{
+  font-style: italic;
+}
+@media screen and (max-width: 479px) {
+  .spacer45{
+      opacity: 0;
+      width : 20%;
+  }
+  .spacer33{
+      opacity: 0;
+      width : 5%;
+  }
+}
+@media screen and (max-width: 839px) and (min-width: 480px)
+{
+  .spacer45{
+      opacity: 0;
+      width : 33%;
+  }
+  .spacer33{
+      opacity: 0;
+      width : 5%;
+  }
+}
+@media screen and (min-width: 840px)
+{
+    .spacer45{
+        opacity: 0;
+        width : 40%;
+    }
+    .spacer33{
+        opacity: 0;
+        width : 5%;
+    }
+}
+
 #a{
   color : #03d0e5;
 
