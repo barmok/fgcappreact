@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import UserMenuClass from './UserMenu'
 import ManageUsersPage from './pages/ManageUser'
 import ManageModulesPage from './pages/ManageModules'
@@ -58,16 +57,17 @@ const App = () =>
 <div className=' mdl-typography--text-center'  >
 <div className='mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-desktop mdl-typography--text-center'>
 
-  <Router>
+
     <div>
     <UserMenuClass />
     <Title />
     <main className="mdl-layout__content">
-      <Route exact path={routes.ACCOUNT} component={() => <AccountPage />} />
-      <Route exact path={routes.ADMIN} component={() => <AdminPage />}/>
+      <Route exact path={routes.ACCOUNT} component={AccountPage} />
+      <Route exact path={routes.ADMIN} component={AdminPage}/>
       <Route exact path={routes.HOME} component={() => <HomePage />} />
       <Route exact path={routes.HOMEWORK} component={() => <HomeworkPage />} />
-      <Route path={routes.EDITMODULE} component={(state) => <EditModulePage state={state} />}/>
+      <Route exact path={routes.EDITMODULES} component={() => <EditModulePage />}/>
+      <Route exact path={routes.EDITMODULE} component={() => <EditModulePage />}/>
       <Route exact path={routes.MANAGEMODULES} component={() => <ManageModulesPage />} />
       <Route exact path={routes.MANAGEUSERS} component={() => <ManageUsersPage />} />
       <Route exact path={routes.NEXTMODULE} component={() => <NextModulePage />} />
@@ -82,7 +82,7 @@ const App = () =>
       </main>
       <Logo />
     </div>
-  </Router>
+
   </div>
   </div>
   </div>

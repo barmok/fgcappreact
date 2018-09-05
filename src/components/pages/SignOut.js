@@ -10,9 +10,5 @@ const SignOutButton = () =>
 >
 Sign out
 </button>
-const SignOutPage = () =>
-  <div>
-    <h1>Sign Out Page</h1>
-  </div>
 
 export default SignOutButton;

@@ -1,6 +1,5 @@
-import React, {Component} from 'react';
+import React from 'react';
 
-import * as routes from '../constants/routes';
 import AuthUserContext from './AuthUserContext';
 import {firebase} from '../firebase';
 import {db} from '../firebase';
@@ -18,11 +17,6 @@ const withAuthentication = (Component) => {
     }
 
     componentDidMount(){
-
-      db.onceGetUsers().then(snapshot =>
-        this.setState(() => ({ users: snapshot.val() }))
-      );
-
       firebase.auth.onAuthStateChanged(authUser => {
         if(authUser)
         {
@@ -34,17 +28,29 @@ const withAuthentication = (Component) => {
         }
       } )
 
-
-
       }
 
     render() {
-      const{
-        history,
-      } = this.props;
 
-      const {authUser} = this.state;
-
+      var {authUser} = this.state;
+      if(authUser)
+      {
+        if(!authUser.role)
+        {
+        db.onceGetUsers().then(snapshot =>
+          this.setState(() => ({ users: snapshot.val() }))
+          :null);
+          if(this.state.users && this.state.authUser)
+          {
+          Object.keys(this.state.users).map(key =>{
+          this.state.authUser.email===this.state.users[key].email?
+            this.state.authUser.role=this.state.users[key].role
+            :null
+            authUser = this.state.authUser
+          })
+          }
+        }
+      }
 
 
         return (

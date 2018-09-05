@@ -1,12 +1,11 @@
 import React, {Component} from 'react';
-import {withRouter} from 'react-router-dom';
 import AuthUserContext from '../AuthUserContext';
 import { Link } from 'react-router-dom';
 import * as routes from '../../constants/routes';
-import SignOutButton from './SignOut';
 import withAuthorization from '../withAuthorization';
-import {auth, db, firebase} from '../../firebase';
-
+import { db} from '../../firebase';
+import  {Route} from 'react-router-dom'
+import EditModulePage from './EditModule'
 
 const INITIAL_STATE ={
   username: '',
@@ -21,6 +20,7 @@ const byPropKey = (propertyName, value) => () => ({
 
 
 class ManageModulesPage extends Component {
+  _isMounted =false
   constructor(props) {
     super(props);
     this.state = {
@@ -30,16 +30,15 @@ class ManageModulesPage extends Component {
 
 
   componentDidMount() {
-    firebase.auth.onAuthStateChanged(authUser =>
-      {
-        this.state.authUser = authUser})
+    this._isMounted =true
 
+
+  }
+  componentWillUnmount(){
+    this._isMounted =false
   }
 
   render() {
-    const{
-      history,
-    } = this.props;
 
     <AuthUserContext.Consumer>
     {
@@ -50,18 +49,11 @@ class ManageModulesPage extends Component {
       }
     </AuthUserContext.Consumer>
     db.onceGetModules().then(snapshot =>
+      this._isMounted?
       this.setState(() => ({ modules: snapshot.val() }))
-    );
-    var authUser;
-    if(this.state.users && this.state.authUser)
-    {
-    Object.keys(this.state.users).map(key =>{
-    this.state.authUser.email===this.state.users[key].email?
-      this.state.authUser.role=this.state.users[key].role
       :null
-      authUser = this.state.authUser
-    })
-    }
+    );
+
     const { modules } = this.state;
     return (
       <div>
@@ -87,11 +79,11 @@ class ModuleList extends Component {
 
       <thead>
       <tr>
-      <th class="mdl-data-table__cell--non-numeric halfWidth">Number</th>
-      <th class="mdl-data-table__cell--non-numeric fullwidth">Name</th>
-      <th class="mdl-data-table__cell--non-numeric fullwidth">YouTube Reference</th>
-      <th class="mdl-data-table__cell--non-numeric fullwidth">Homework</th>
-      <th class="mdl-data-table__cell--non-numeric halfWidth"></th>
+      <th className="mdl-data-table__cell--non-numeric halfWidth">Number</th>
+      <th className="mdl-data-table__cell--non-numeric fullwidth">Name</th>
+      <th className="mdl-data-table__cell--non-numeric fullwidth">YouTube Reference</th>
+      <th className="mdl-data-table__cell--non-numeric fullwidth">Homework</th>
+      <th className="mdl-data-table__cell--non-numeric halfWidth"></th>
     </tr>
     </thead>
     <tbody>
@@ -116,6 +108,7 @@ class ModuleList extends Component {
       super(props);
     this.state = this.props.module;
     this.state.id=this.props.ukey;
+    this.editClicked = this.editClicked.bind(this);
     }
     saveUser(){
       this.isInvalid = !this.isInvalid;
@@ -136,17 +129,22 @@ class ModuleList extends Component {
             });
           };
 
+      editClicked()
+      {
+        var clickedModule = this.state;
+          <AuthUserContext.Provider value={clickedModule}>
+          <Component/>
+          </AuthUserContext.Provider>
+      }
 
-    editClicked() {
-      this.isInvalid = !this.isInvalid;
-    }
+
     render() {
       const{ textContent,
       title,
       videoLink,
     } = this.state;
       return(
-    <tr>
+    <tr key={this.state.id}>
     <td className="mdl-data-table__cell--numeric">
     <input
       className="mdl-textfield__input halfWidth"
@@ -189,12 +187,11 @@ class ModuleList extends Component {
       placeholder="YouTube Reference"
     /> </td>
     <td>
-    <Link  to={{pathname: routes.EDITMODULE, query: {module: this.state}}}
 
-  >
+  <Link to={{pathname: routes.EDITMODULE,
+  state: this.state}}>
     <button className="mdl-button mdl-js-button mdl-button--raised edit"
-
-
+    onClick={() => this.editClicked()}
     disabled={false} type="button" >
     Edit
     </button>

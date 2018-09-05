@@ -1,11 +1,9 @@
 import React, {Component} from 'react';
-import {withRouter} from 'react-router-dom';
 import AuthUserContext from '../AuthUserContext';
 import { Link } from 'react-router-dom';
 import * as routes from '../../constants/routes';
-import SignOutButton from './SignOut';
 import withAuthorization from '../withAuthorization';
-import {auth, db, firebase} from '../../firebase';
+import { db, firebase} from '../../firebase';
 
 
 const INITIAL_STATE ={
@@ -21,6 +19,7 @@ const byPropKey = (propertyName, value) => () => ({
 
 
 class ManageUsersPage extends Component {
+  _isMounted =false
   constructor(props) {
     super(props);
     this.state = {
@@ -30,39 +29,27 @@ class ManageUsersPage extends Component {
 
 
   componentDidMount() {
-    firebase.auth.onAuthStateChanged(authUser =>
-      {
-        this.state.authUser = authUser})
+    this._isMounted =true
 
   }
-
+  componentWillUnmount(){
+    this._isMounted =false
+  }
   render() {
-    const{
-      history,
-    } = this.props;
-    var isInvalid = !this.state.wasEditClicked;
 
     <AuthUserContext.Consumer>
     {
 
       authUser => authUser ?
-      this.state.authUser = authUser
+      this.setState(() => ({ authUser: authUser }))
         :null
       }
     </AuthUserContext.Consumer>
     db.onceGetUsers().then(snapshot =>
+      this._isMounted?
       this.setState(() => ({ users: snapshot.val() }))
-    );
-    var authUser
-    if(this.state.users && this.state.authUser)
-    {
-    Object.keys(this.state.users).map(key =>{
-    this.state.authUser.email===this.state.users[key].email?
-      this.state.authUser.role=this.state.users[key].role
       :null
-      authUser = this.state.authUser
-    })
-    }
+    ); 
     const { users } = this.state;
     return (
       <div>
@@ -90,10 +77,10 @@ class UserList extends Component {
 
       <thead>
       <tr>
-      <th class="mdl-data-table__cell--non-numeric fullwidth">Username</th>
-      <th class="mdl-data-table__cell--non-numeric fullwidth">Email</th>
-      <th class="mdl-data-table__cell--non-numeric fullwidth">Role</th>
-      <th class="mdl-data-table__cell--non-numeric fullwidth"></th>
+      <th className="mdl-data-table__cell--non-numeric fullwidth">Username</th>
+      <th className="mdl-data-table__cell--non-numeric fullwidth">Email</th>
+      <th className="mdl-data-table__cell--non-numeric fullwidth">Role</th>
+      <th className="mdl-data-table__cell--non-numeric fullwidth"></th>
     </tr>
     </thead>
     <tbody>

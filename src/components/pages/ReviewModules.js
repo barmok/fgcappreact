@@ -30,9 +30,6 @@ class ManageModulesPage extends Component {
 
 
   componentDidMount() {
-    firebase.auth.onAuthStateChanged(authUser =>
-      {
-        this.state.authUser = authUser})
 
   }
 
@@ -52,16 +49,6 @@ class ManageModulesPage extends Component {
     db.onceGetModules().then(snapshot =>
       this.setState(() => ({ modules: snapshot.val() }))
     );
-    var authUser;
-    if(this.state.users && this.state.authUser)
-    {
-    Object.keys(this.state.users).map(key =>{
-    this.state.authUser.email===this.state.users[key].email?
-      this.state.authUser.role=this.state.users[key].role
-      :null
-      authUser = this.state.authUser
-    })
-    }
     const { modules } = this.state;
     return (
       <div>
@@ -165,7 +152,7 @@ class ModuleList extends Component {
       type="text"
       placeholder="Email Address"
     /> </td>
-    
+
     <td className="mdl-data-table__cell--non-numeric">
     <input
       className="mdl-textfield__input minWidth"

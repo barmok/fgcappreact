@@ -9,6 +9,7 @@ import {db, firebase} from '../../firebase';
 
 
 class HomePage extends Component {
+  _isMounted =false
   constructor(props) {
     super(props);
 
@@ -19,13 +20,6 @@ class HomePage extends Component {
     };
 
   }
-  componentDidMount() {
-    firebase.auth.onAuthStateChanged(authUser =>
-      {
-        this.state.authUser = authUser})
-
-  }
-
   render() {
     const{
       history,
@@ -34,28 +28,13 @@ class HomePage extends Component {
     {
 
       authUser => authUser ?
-      this.state.authUser = authUser
+      this.setState(() => ({ authUser: authUser }))
         :null
       }
     </AuthUserContext.Consumer>
 
-    db.onceGetUsers().then(snapshot =>
-      this.setState(() => ({ users: snapshot.val() }))
-    );
-    var authUser
-    if(this.state.users && this.state.authUser)
-    {
-    Object.keys(this.state.users).map(key =>{
-    this.state.authUser.email===this.state.users[key].email?
-      this.state.authUser.role=this.state.users[key].role
-      :null
-      authUser = this.state.authUser
-    })
-    }
 
-    <AuthUserContext.Provider value={authUser}>
-    <Component />
-    </AuthUserContext.Provider>
+
     const { users } = this.state;
     return (
       <div>
@@ -101,9 +80,9 @@ const Content = ({history}) =>
   <div>
 
     <br/><br/>
-    <Link to={routes.ACCOUNT}><button type="submit" className="mdl-button mdl-js-button mdl-button--raised" id="quickstart-account" name="account">Account</button></Link>
+    <Link to={{pathname:routes.ACCOUNT, state: {module: this.state}}}><button type="submit" className="mdl-button mdl-js-button mdl-button--raised" id="quickstart-account" name="account">Account</button></Link>
     <br/><br/>
-    <Link to={routes.ADMIN}><button type="submit" className="mdl-button mdl-js-button mdl-button--raised" id="admin" name="admin">Admin</button></Link>
+    <Link to={{pathname:routes.ADMIN, state: {module: this.state}}}><button type="submit" className="mdl-button mdl-js-button mdl-button--raised" id="admin" name="admin">Admin</button></Link>
     <br/><br/>
     <br/><br/>
     <SignOutButton />

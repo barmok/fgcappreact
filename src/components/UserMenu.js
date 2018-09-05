@@ -2,9 +2,8 @@ import React, {Component} from "react";
 import AuthUserContext from './AuthUserContext';
 import { Link } from 'react-router-dom';
 import * as routes from '../constants/routes';
-import SignOutButton from './pages/SignOut';
 import withAuthentication from './withAuthentication';
-import {db,firebase} from '../firebase';
+import {firebase} from '../firebase';
 
 var showDrawer
 

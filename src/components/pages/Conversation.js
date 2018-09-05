@@ -20,9 +20,9 @@ class HomePage extends Component {
 
   }
   componentDidMount() {
-    firebase.auth.onAuthStateChanged(authUser =>
+    firebase.auth.onAuthStateChanged(authU =>
       {
-        this.state.authUser = authUser})
+        this.setState(() => ({ authUser: authU }))})
 
   }
 
@@ -39,23 +39,7 @@ class HomePage extends Component {
       }
     </AuthUserContext.Consumer>
 
-    db.onceGetUsers().then(snapshot =>
-      this.setState(() => ({ users: snapshot.val() }))
-    );
-    var authUser
-    if(this.state.users && this.state.authUser)
-    {
-    Object.keys(this.state.users).map(key =>{
-    this.state.authUser.email===this.state.users[key].email?
-      this.state.authUser.role=this.state.users[key].role
-      :null
-      authUser = this.state.authUser
-    })
-    }
 
-    <AuthUserContext.Provider value={authUser}>
-    <Component />
-    </AuthUserContext.Provider>
     const { users } = this.state;
     return (
       <div>
