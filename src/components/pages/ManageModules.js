@@ -1,17 +1,21 @@
 import React, {Component} from 'react';
-import AuthUserContext from '../AuthUserContext';
 import { Link } from 'react-router-dom';
 import * as routes from '../../constants/routes';
-import withAuthorization from '../withAuthorization';
+import EditModule from './EditModule.js';
+import withAuthorization from '../withAuthorization.js';
+import withAuthentication from '../withAuthentication.js';
 import { db} from '../../firebase';
 import  {Route} from 'react-router-dom'
 import EditModulePage from './EditModule'
+
+
 
 const INITIAL_STATE ={
   username: '',
   email: '',
   role:'',
   error: null,
+  modules: null,
 };
 const byPropKey = (propertyName, value) => () => ({
   [propertyName]: value,
@@ -40,14 +44,7 @@ class ManageModulesPage extends Component {
 
   render() {
 
-    <AuthUserContext.Consumer>
-    {
 
-      authUser => authUser ?
-      this.state.authUser = authUser
-        :null
-      }
-    </AuthUserContext.Consumer>
     db.onceGetModules().then(snapshot =>
       this._isMounted?
       this.setState(() => ({ modules: snapshot.val() }))
@@ -56,6 +53,7 @@ class ManageModulesPage extends Component {
 
     const { modules } = this.state;
     return (
+
       <div>
         {!!modules && <ModuleList modules={modules}/>}
         </div>
@@ -68,8 +66,6 @@ class ModuleList extends Component {
   render(){
     var modules = this.props.modules;
     return(
-<AuthUserContext.Consumer>
-{ authUser =>
 
   <div className="mdl-center">
     <h2>List of Modules</h2>
@@ -94,12 +90,25 @@ class ModuleList extends Component {
 
     )}
 
+
     </tbody>
     </table>
+    <Link to={{pathname: routes.ADDMODULE,
+    state: this.state}}>
+    <button className="mdl-button mdl-js-button mdl-button--raised edit"
+    disabled={false} type="button" >
+    Add
+    </button>
+    </Link>
+    <Link to={routes.ADMIN}>
+    <button className="mdl-button mdl-js-button mdl-button--raised edit"
+
+    disabled={false} type="button" >
+    Back
+    </button>
+    </Link>
     </div>
-    </div>
-  }
-  </AuthUserContext.Consumer>)
+    </div>)
 }
 }
 
@@ -110,31 +119,12 @@ class ModuleList extends Component {
     this.state.id=this.props.ukey;
     this.editClicked = this.editClicked.bind(this);
     }
-    saveUser(){
-      this.isInvalid = !this.isInvalid;
-        const {
-          key,
-          username,
-          email,
-          role,
-        } = this.state;
-        const{
-          history,
-        } = this.props;
-          db.doUpdateUserRole(key,role)
-            .then(() => {
-            })
-            .catch(error => {
-              this.setState(byPropKey('error', error));
-            });
-          };
+
 
       editClicked()
       {
-        var clickedModule = this.state;
-          <AuthUserContext.Provider value={clickedModule}>
-          <Component/>
-          </AuthUserContext.Provider>
+
+
       }
 
 
@@ -191,7 +181,6 @@ class ModuleList extends Component {
   <Link to={{pathname: routes.EDITMODULE,
   state: this.state}}>
     <button className="mdl-button mdl-js-button mdl-button--raised edit"
-    onClick={() => this.editClicked()}
     disabled={false} type="button" >
     Edit
     </button>
@@ -203,6 +192,6 @@ class ModuleList extends Component {
 
 
 
-  const authCondition = (authUser) => !!authUser;
+  const authCondition = (authUser) => !!authUser && authUser.role === 'admin';
 
-export default withAuthorization(authCondition)(ManageModulesPage);
+  export default withAuthorization(authCondition)(ManageModulesPage);

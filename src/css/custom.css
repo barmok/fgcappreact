@@ -58,6 +58,9 @@ white-space:normal !important;
 .overflow{
   overflow: scroll;
 }
+.moduleTextarea{
+  height: 120px;
+}
 
 .logo-container1{
 

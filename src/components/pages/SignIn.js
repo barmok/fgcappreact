@@ -14,8 +14,8 @@ const SignInPage = ({history}) =>
   : <div>
     <h1>Sign In</h1>
     <SignInForm history={history} />
-    <PasswordForgetLink />
     <SignUpLink />
+    <PasswordForgetLink />
   </div>
 }
 </AuthUserContext.Consumer>
@@ -58,7 +58,6 @@ const SignInPage = ({history}) =>
 
 
         history.push(routes.HOME);
-        window.location.reload();
       })
       .catch(error =>{
         this.setState(byPropKey('error', error));

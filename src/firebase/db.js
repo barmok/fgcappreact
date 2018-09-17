@@ -20,4 +20,8 @@ export const doCreateUser = (id, username, email, role) =>
   export const onceGetModules = () =>
   db.ref('modules').once('value');
 
+  export const onceIdLastModule = () =>
+  db.ref('modules').limitToLast(1).once("child_added");
+
+
   //Other Entity APIs ...

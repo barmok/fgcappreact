@@ -67,12 +67,11 @@ function close() {
 
 const UserMenu = ({history}) =>
         <AuthUserContext.Consumer>
-        {
-          authUser => authUser ?
+        {authUser => authUser ?
           authUser.role==='participant'
           ?<PatientMenu/>
-          : authUser.role==='admin'
-          ?<AdminMenu/>
+          : authUser.role==='admin'?
+          <AdminMenu/>
           : authUser.role==='therapist'
           ?< TherapistMenu />
           :null
@@ -102,5 +101,5 @@ const TherapistMenu = () =>
       <Link className="mdl-navigation__link" to={routes.ACCOUNT}  style={{ textDecoration: 'none' }}>Account</Link>
 </nav>
 
-
+//export default UserMenuClass;
 export default withAuthentication(UserMenuClass);

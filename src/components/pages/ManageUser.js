@@ -16,7 +16,31 @@ const byPropKey = (propertyName, value) => () => ({
   [propertyName]: value,
 });
 
+const Search = ({ value, onChange, children }) =>
+<form>
+{children} <input
+type="text"
+value={value}
+onChange={onChange}
+placeholder={"username"}
+/>
+</form>
 
+const isSearched = searchTerm => item =>
+item.username.toLowerCase().includes(searchTerm.toLowerCase());
+
+function snapshotToArray(snapshot) {
+    var returnArr = [];
+
+    snapshot.forEach(function(childSnapshot) {
+        var item = childSnapshot.val();
+        item.key = childSnapshot.key;
+
+        returnArr.push(item);
+    });
+
+    return returnArr;
+};
 
 class ManageUsersPage extends Component {
   _isMounted =false
@@ -47,9 +71,10 @@ class ManageUsersPage extends Component {
     </AuthUserContext.Consumer>
     db.onceGetUsers().then(snapshot =>
       this._isMounted?
-      this.setState(() => ({ users: snapshot.val() }))
+      this.setState(() => ({ users: snapshotToArray(snapshot) }))
       :null
-    ); 
+    );
+
     const { users } = this.state;
     return (
       <div>
@@ -61,8 +86,32 @@ class ManageUsersPage extends Component {
 
 
 class UserList extends Component {
+  _isMounted =false
+  constructor(props) {
+super(props);
+this.state = {
+  users:  this.props.users,
+searchTerm: '',
+};
+this.onSearchChange = this.onSearchChange.bind(this);
+}
+componentDidMount()
+{
+  this._isMounted = true
+}
+componentWillUnmount()
+{
+  this._isMounted = false
+}
+
+onSearchChange(event) {
+  if(this._isMounted){
+this.setState({ searchTerm: event.target.value });
+}
+}
   render(){
-    var users = this.props.users;
+    const { searchTerm, users } = this.state;
+    //var users = this.props.users;
     return(
 <AuthUserContext.Consumer>
 { authUser =>
@@ -73,6 +122,12 @@ class UserList extends Component {
     <h2>List of Users</h2>
     <p> (Saved on Sign Up in Firebase Database)</p>
     <div className="overflow">
+    <Search
+      value={searchTerm}
+      onChange={this.onSearchChange}
+      >
+      Search
+      </Search>
     <table className="fullwidth mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
 
       <thead>
@@ -83,13 +138,17 @@ class UserList extends Component {
       <th className="mdl-data-table__cell--non-numeric fullwidth"></th>
     </tr>
     </thead>
+
     <tbody>
-    {Object.keys(users).map(key =>
 
-      <EditUserForm user={users[key]} ukey={key} />
+    {
 
+      this._isMounted?
+      users.filter(isSearched(searchTerm)).map(item =>
+      <EditUserForm user={item} ukey={item.key} />)
 
-    )}
+      :null
+    }
 
     </tbody>
     </table>
@@ -109,7 +168,6 @@ class UserList extends Component {
     constructor(props){
       super(props);
     this.state = this.props.user;
-    this.state.key=this.props.ukey;
 
     this.isInvalid = true;
     }
@@ -134,13 +192,13 @@ class UserList extends Component {
 
 
     editClicked() {
-      this.isInvalid = !this.isInvalid;
+      
     }
     render() {
-      const{ username,
+      const {username,
       email,
-      role,
-    } = this.state;
+      role,} = this.state;
+
       return(
     <tr>
     <td className="mdl-data-table__cell--non-numeric">
@@ -201,6 +259,6 @@ class UserList extends Component {
 
 
 
-  const authCondition = (authUser) => !!authUser;
+  const authCondition = (authUser) => !!authUser && authUser.role==='admin';
 
 export default withAuthorization(authCondition)(ManageUsersPage);

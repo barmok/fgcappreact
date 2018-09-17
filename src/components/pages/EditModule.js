@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
-import AuthUserContext from '../AuthUserContext';
-import withAuthorization from '../withAuthorization';
-import { db} from '../../firebase';
-
+import { Link } from 'react-router-dom';
+import * as routes from '../../constants/routes';
 
 const INITIAL_STATE ={
   textContent: '',
@@ -15,132 +13,122 @@ const byPropKey = (propertyName, value) => () => ({
   [propertyName]: value,
 });
 
-var module
 
 
 class EditModulePage extends Component {
   constructor(props){
         super(props);
-        this.state = {
-          ...INITIAL_STATE
+        if(this.props.state.location)
+        {
+          this.state = this.props.state.location.state;
         }
+        else {
+          this.state = {
+            ...INITIAL_STATE
+
+          }
+        }
+        console.log(this);
       }
 
 
+componentDidMount()
+{
 
 
-  render() {
+}
+editClicked()
+{
+  
+}
 
-    <AuthUserContext.Consumer>
-    {
-      authUser => authUser ?
-      this.state.authUser = authUser
-        :null,
+render() {
+  var editDisabled = true;
+  const{ textContent,
+  title,
+  videoLink,
+} = this.state;
+  if(this.state)
+  {
 
-      clickedModule => clickedModule?
-      module=clickedModule
-      :null
-      }
-    </AuthUserContext.Consumer>
-    const modul = module;
-    return (
-      <div>
-        <EditModuleForm module={modul}/>
-      </div>
+  editDisabled=false;
+}
+else
+{
+  this.state = {
+    ...INITIAL_STATE
 
-    )
   }
+}
+  return(
+<div key={this.state.id}>
+<div className="mdl-data-table__cell--numeric">
+<input
+  className="mdl-textfield__input halfWidth"
+  disabled={true}
+  value={this.state.id}
+  type="text"
+  placeholder="moduleNumber"
+/>
+</div>
+<div className="mdl-data-table__cell--non-numeric">
+<input
+  className="mdl-textfield__input minWidth"
+  disabled={editDisabled}
+  value={title}
+  onChange={event => this.setState(byPropKey('title', event.target.value))
+    }
+
+  type="text"
+  placeholder="title"
+/> </div>
+<div className="mdl-data-table__cell--non-numeric">
+<input
+  className="mdl-textfield__input minWidth"
+  disabled={editDisabled}
+  value={this.state.videoLink}
+  onChange={event => this.setState(byPropKey('videoLink', event.target.value))
+    }
+
+  type="text"
+  placeholder="YouTube Reference"
+/> </div>
+<div className="mdl-data-table__cell--non-numeric">
+<input
+  className="mdl-textfield__input minWidth"
+  disabled={true}
+  value={"Link to homework"}
+  onChange={event => this.setState(byPropKey('email', event.target.value))
+    }
+
+  type="text"
+  placeholder="YouTube Reference"
+/> </div>
+<div>
+
+
+<button className="mdl-button mdl-js-button mdl-button--raised edit"
+onClick={()=>this.editClicked()}
+disabled={editDisabled} type="button" >
+Edit
+</button>
+<Link to={routes.MANAGEMODULES}>
+<button className="mdl-button mdl-js-button mdl-button--raised edit"
+
+disabled={false} type="button" >
+Back
+</button>
+</Link>
+
+</div>
+</div>)
+}
 };
 
 
 
-class EditModuleForm extends Component {
-  constructor(props){
-    super(props);
-  this.state = this.props.module;
-  this.state.id=this.props.ukey;
-  }
-  saveUser(){
-    this.isInvalid = !this.isInvalid;
-      const {
-        key,
-        role,
-      } = this.state;
-        db.doUpdateUserRole(key,role)
-          .then(() => {
-          })
-          .catch(error => {
-            this.setState(byPropKey('error', error));
-          });
-        };
-
-            render() {
-              const{ textContent,
-              title,
-              videoLink,
-            } = this.state;
-              return(
-            <tr key={this.state.id}>
-            <td className="mdl-data-table__cell--numeric">
-            <input
-              className="mdl-textfield__input halfWidth"
-              disabled={true}
-              value={this.state.id}
-              type="text"
-              placeholder="moduleNumber"
-            /></td>
-            <td className="mdl-data-table__cell--non-numeric">
-            <input
-              className="mdl-textfield__input minWidth"
-              disabled={true}
-              value={title}
-              onChange={event => this.setState(byPropKey('email', event.target.value))
-                }
-
-              type="text"
-              placeholder="Email Address"
-            /> </td>
-            <td className="mdl-data-table__cell--non-numeric">
-            <input
-              className="mdl-textfield__input minWidth"
-              disabled={true}
-              value={videoLink}
-              onChange={event => this.setState(byPropKey('email', event.target.value))
-                }
-
-              type="text"
-              placeholder="YouTube Reference"
-            /> </td>
-            <td className="mdl-data-table__cell--non-numeric">
-            <input
-              className="mdl-textfield__input minWidth"
-              disabled={true}
-              value={"Link to homework"}
-              onChange={event => this.setState(byPropKey('email', event.target.value))
-                }
-
-              type="text"
-              placeholder="YouTube Reference"
-            /> </td>
-            <td>
 
 
-            <button className="mdl-button mdl-js-button mdl-button--raised edit"
-
-            disabled={false} type="button" >
-            Edit
-            </button>
-
-            </td>
-            </tr>)
-          }
-          }
-
-
-
-
-
-
-  const authCondition = (authUser) => !!authUser;
-
-export default withAuthorization(authCondition)(EditModulePage);
+  //const authCondition = (authUser) => !!authUser;
+export default EditModulePage;
+//export default withAuthorization(authCondition)(EditModulePage);

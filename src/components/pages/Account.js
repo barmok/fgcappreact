@@ -30,7 +30,6 @@ class AccountPage extends Component {
   render() {
     <AuthUserContext.Consumer>
     {
-
       authUser => authUser ?
       this._isMounted?
       this.setState(() => ({ authUser: authUser }))
