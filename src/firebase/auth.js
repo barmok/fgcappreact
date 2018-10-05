@@ -8,6 +8,16 @@ auth.createUserWithEmailAndPassword(email, password);
 export const doSignInWithEmailAndPassword = (email, password) =>
 auth.signInWithEmailAndPassword(email, password);
 
+//Sign In with phoneNumber
+export const doSignInWithPhoneNumber = (phoneNumber, appVerifier) =>
+auth.signInWithPhoneNumber(phoneNumber, appVerifier).then(function (confirmationResult)
+{
+
+  window.confirmationResult = confirmationResult;
+})
+
+
+
 //Sign Out
 export const doSignOut = () => auth.signOut();
 

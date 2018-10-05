@@ -4,7 +4,9 @@ import AuthUserContext from '../AuthUserContext';
 import { SignUpLink } from './SignUp';
 import {PasswordForgetLink} from './PasswordForget';
 import {auth} from '../../firebase';
+import * as firebase from 'firebase';
 import * as routes from '../../constants/routes'
+import { Link } from 'react-router-dom';
 
 
 const SignInPage = ({history}) =>
@@ -14,8 +16,6 @@ const SignInPage = ({history}) =>
   : <div>
     <h1>Sign In</h1>
     <SignInForm history={history} />
-    <SignUpLink />
-    <PasswordForgetLink />
   </div>
 }
 </AuthUserContext.Consumer>
@@ -27,6 +27,7 @@ const SignInPage = ({history}) =>
   const INITIAL_STATE = {
     email: '',
     password: '',
+    phoneNumber: '',
     users:null,
     error: null,
   };
@@ -42,52 +43,71 @@ const SignInPage = ({history}) =>
     onSubmit = (event) => {
       const {
         email,
+        phoneNumber,
         password,
       } = this.state;
-
-
-
 
       const{
         history,
       } = this.props;
-
+      /*
       auth.doSignInWithEmailAndPassword(email, password)
       .then(()=>{
         this.setState(()=>({ ...INITIAL_STATE}));
+        */
+        if (window.recaptchaVerifier && this.recaptchaWrapperRef) {
+          window.recaptchaVerifier.clear()
+          this.recaptchaWrapperRef.innerHTML = `<div id="recaptcha-container"></div>`
+        }
+        window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+        'size': 'invisible',
+        'callback': function(response) {
+            // reCAPTCHA solved, allow signInWithPhoneNumber.
+           console.log(response);
+        }
+    });
+    var appVerifier = window.recaptchaVerifier;
+        auth.doSignInWithPhoneNumber(phoneNumber, appVerifier)
+        .then(() =>{
+        history.push(routes.SMS_CODE_CHECK);
 
 
-        history.push(routes.HOME);
-      })
-      .catch(error =>{
-        this.setState(byPropKey('error', error));
-      });
+      }).catch(error=>{
+
+        this.setState(()=>({ ...INITIAL_STATE}));
+
+          this.setState(byPropKey('error', error));
+          });
 
       event.preventDefault();
     }
 
     render(){
       const {
-        email, password, error,
+        email,phoneNumber, password, error,
       } = this.state;
 
-      const isInvalid = password ==='' || email === '';
-
+      //const isInvalid = password ==='' || email === '';
+      const isInvalid = phoneNumber ==='';
       return(
         <form onSubmit={this.onSubmit}>
+
+          <br />
+          Phone Number:
           <input
-            value={email}
-            onChange={event => this.setState(byPropKey('email', event.target.value))}
+            value={phoneNumber}
+            onChange={event => this.setState(byPropKey('phoneNumber', event.target.value))}
             type="text"
-            placeholder="Email Address"
+            placeholder="+61 234 567 8910"
           />
           <br />
-          <input
-            value={password}
-            onChange={event => this.setState(byPropKey('password', event.target.value))}
-            type="password"
-            placeholder="Password"
-          />
+          <div ref={ref => this.recaptchaWrapperRef = ref}>
+          <div id="recaptcha-container"></div>
+          </div>
+          <br />
+          Enter your phone number to sign in, you will receive an sms on your phone to validate your sign in.
+          <br />
+          It might take a few seconds before you receive the message.
           <br />
           <br />
           <button disabled={isInvalid} type="submit" className="mdl-button mdl-js-button mdl-button--raised">

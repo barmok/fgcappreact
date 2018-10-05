@@ -61,7 +61,21 @@ white-space:normal !important;
 .moduleTextarea{
   height: 120px;
 }
-
+.homework{
+  border: 1px solid rgba(0,0,0,.12);
+}
+.Therapist{
+  background-color: lightcyan;
+  text-align: left;
+  list-style-type: none;
+  border-radius: .4em;
+  margin: 5px 5px ;
+}
+.Participant{
+  text-align: right;
+  list-style-type: none;
+  border-radius: .4em;
+}
 .logo-container1{
 
     background-image : url(../img/logo.jpg);
@@ -79,6 +93,11 @@ white-space:normal !important;
     width: 300px;
     display: inline-block;
 }
+.date{
+font-size: 60% !important;
+    text-align: right;
+    line-height: 5px;
+  }
 .module-text{
   text-align: left;
 }

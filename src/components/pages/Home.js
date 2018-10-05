@@ -24,6 +24,7 @@ class HomePage extends Component {
     const{
       history,
     } = this.props;
+    var User;
     <AuthUserContext.Consumer>
     {
 
@@ -33,13 +34,12 @@ class HomePage extends Component {
       }
     </AuthUserContext.Consumer>
 
-
+    console.log(this.state);
 
     const { users } = this.state;
     return (
       <div>
         <Content history={history}/>
-        {!!users && <UserList users={users} />}
         </div>
     )
   }
@@ -50,7 +50,7 @@ const Content = ({history}) =>
 {
   authUser => authUser ?
   authUser.role==='participant'?
-  <ParticipantMenu/>
+  <ParticipantMenu authUser={authUser}/>
   : authUser.role==='admin'?
   <AdminMenu />
   : authUser.role==='therapist'?
@@ -61,14 +61,24 @@ const Content = ({history}) =>
   </AuthUserContext.Consumer>
 
 
-  const ParticipantMenu = () =>
+  const ParticipantMenu = (auth) =>
   <div>
   <br/><br/>
     <Link to={routes.REVIEWMODULES}><button type="submit" className="mdl-button mdl-js-button mdl-button--raised" id="reviewModules" name="review">Previous Modules</button></Link>
     <br/><br/>
-    <Link to={routes.NEXTMODULE}><button type="submit" className="mdl-button mdl-js-button mdl-button--raised" id="nextModule" name="next">Next Module </button></Link>
+    <Link to={{pathname: routes.SHOWNEXTMODULE,
+    state: this.state}}>
+      <button className="mdl-button mdl-js-button mdl-button--raised edit"
+      disabled={false} type="button" >
+      Next Module Active
+      </button>
+      </Link>
+      <br />
+      <br />
+    <Link to={routes.NEXTMODULE}><button type="submit" className="mdl-button mdl-js-button mdl-button--raised" id="nextModule" name="next">Next Module Passive</button></Link>
     <br/><br/>
-    <Link to={routes.CONVERSATION}><button type="submit" className="mdl-button mdl-js-button mdl-button--raised" id="emailTherapist" name="emailToTherapist">&nbsp;Message therapist&nbsp;</button></Link>
+    <Link to={{pathname: routes.CONVERSATION,
+    state: {key:'hpohFFnkGLTGYpOOrusypsyt1O42' ,authUserKey:auth.authUser.uid, authUserRole:auth.authUser.role}}}><button type="submit" className="mdl-button mdl-js-button mdl-button--raised" id="emailTherapist" name="emailToTherapist">&nbsp;Message therapist&nbsp;</button></Link>
 
     <br/><br/>
     <br/><br/>
@@ -80,9 +90,12 @@ const Content = ({history}) =>
   <div>
 
     <br/><br/>
-    <Link to={{pathname:routes.ACCOUNT, state: {module: this.state}}}><button type="submit" className="mdl-button mdl-js-button mdl-button--raised" id="quickstart-account" name="account">Account</button></Link>
+    <Link to={routes.ACCOUNT}><button type="submit" className="mdl-button mdl-js-button mdl-button--raised" id="quickstart-account" name="account">Account</button></Link>
     <br/><br/>
-    <Link to={{pathname:routes.ADMIN, state: {module: this.state}}}><button type="submit" className="mdl-button mdl-js-button mdl-button--raised" id="admin" name="admin">Admin</button></Link>
+    <Link to={routes.ADMIN}><button type="submit" className="mdl-button mdl-js-button mdl-button--raised" id="admin" name="admin">Admin</button></Link>
+    <br/><br/>
+    <Link to={routes.CONVERSATIONLIST}><button type="submit" className="mdl-button mdl-js-button mdl-button--raised" id="emailTherapist" name="emailToTherapist">&nbsp;Messages &nbsp;</button></Link>
+
     <br/><br/>
     <br/><br/>
     <SignOutButton />
@@ -109,25 +122,7 @@ const Content = ({history}) =>
     <br/><br/>
   </div>
 
-const UserList = ({ users }) =>
-<AuthUserContext.Consumer>
-{ authUser =>
 
-
-  <div className="hidden">
-    <h2 >List of module completed of {authUser.email}</h2>
-    <p> (Saved on Sign Up in Firebase Database)</p>
-
-    {Object.keys(users).map(key =>
-      <div key={key}>{users[key].username}  {users[key].role}
-      {authUser.email===users[key].email?
-      null
-      :null}
-      </div>
-    )}
-    </div>
-  }
-  </AuthUserContext.Consumer>
 
 
 

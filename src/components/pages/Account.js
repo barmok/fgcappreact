@@ -44,7 +44,7 @@ class AccountPage extends Component {
         <div>
           <h1>Account:  {authUser.email}</h1>
           <br />
-          <PasswordChangeForm />
+          Notification Settings
         </div>
       }
       </AuthUserContext.Consumer>

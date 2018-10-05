@@ -15,6 +15,11 @@ import AccountPage from './components/pages/Account';
 import NextModulePage from './components/pages/NextModule'
 import HomeworkPage from './components/pages/Homework';
 import PasswordForgetPage from './components/pages/PasswordForget';
+import ShowModulePage from './components/pages/showModule';
+import ShowHomeworkPage from './components/pages/showHomework';
+import TherapistConversationPage from './components/pages/ConversationList';
+import Conversation from './components/pages/Conversation'
+import SmsCodeCheckPage from './components/pages/smsCodeCheck'
 
 import Logo from './components/logo';
 import Title from './components/Title';
@@ -22,6 +27,7 @@ import {Helmet} from "react-helmet";
 import './css/custom.css';
 import './css/index.css';
 import './css/material.orange-indigo.min.css';
+
 
 
 
@@ -57,15 +63,23 @@ class App extends Component {
       <Route exact path={routes.ACCOUNT} component={AccountPage} />
       <Route exact path={routes.HOME} component={() => <HomePage />} />
       <Route exact path={routes.EDITMODULE} component={(state) => <EditModulePage state={state} />}/>
+      <Route exact path={routes.MODULEPREVIEW} component={(state) => <ShowModulePage state={state} />} />
+      <Route exact path={routes.HOMEWORK} component={() => <HomeworkPage />} />
+      <Route exact path={routes.HOMEWORKPREVIEW } component={(state) => <ShowHomeworkPage state={state} />} />
       <Route exact path={routes.MANAGEMODULES} component={() => <ManageModulesPage />} />
-      <Route exact path={routes.ADDMODULE} component={() => <AddModulePage />}/>
+      <Route exact path={routes.ADDMODULE} component={(state) => <AddModulePage state={state} />}/>
       <Route exact path={routes.ADMIN} component={AdminPage}/>
       <Route exact path={routes.MANAGEUSERS} component={() => <ManageUsersPage />} />
       <Route exact path={routes.SIGN_IN} component={() => <SignInPage />} />
+      <Route exact path={routes.SMS_CODE_CHECK} component={() => <SmsCodeCheckPage />} />
       <Route exact path={routes.SIGN_UP} component={() => <SignUpPage />} />
       <Route exact path={routes.PASSWORD_FORGET} component={() => <PasswordForgetPage />} />
       <Route exact path={routes.NEXTMODULE} component={() => <NextModulePage />} />
-      <Route exact path={routes.HOMEWORK} component={() => <HomeworkPage />} />
+      <Route exact path={routes.SHOWHOMEWORK} component={() => <ShowHomeworkPage />} />
+      <Route exact path={routes.CONVERSATION} component={(state) => <Conversation state={state}/>} />
+      <Route exact path={routes.CONVERSATIONLIST} component={() => <TherapistConversationPage />} />
+      <Route exact path={routes.SHOWNEXTMODULE} component={() => <ShowModulePage />} />
+
 
       </main>
       <Logo />

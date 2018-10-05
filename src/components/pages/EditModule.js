@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
 import * as routes from '../../constants/routes';
+import { db} from '../../firebase';
 
 const INITIAL_STATE ={
   textContent: '',
@@ -28,8 +29,28 @@ class EditModulePage extends Component {
 
           }
         }
-        console.log(this);
+        this.saveModule = this.saveModule.bind(this);
+        console.log(this.state);
       }
+
+      saveModule(){
+        this.isInvalid = !this.isInvalid;
+          const {
+            id,
+            textContent,
+            title,
+            videoLink,
+            homework,
+          } = this.state;
+            db.doUpdateModule(id,textContent,title,videoLink,homework)
+              .then(() => {
+              })
+              .catch(error => {
+                this.setState(byPropKey('error', error));
+              });
+
+            }
+            ;
 
 
 componentDidMount()
@@ -37,16 +58,13 @@ componentDidMount()
 
 
 }
-editClicked()
-{
-  
-}
 
 render() {
   var editDisabled = true;
   const{ textContent,
   title,
   videoLink,
+  homework,
 } = this.state;
   if(this.state)
   {
@@ -62,6 +80,7 @@ else
 }
   return(
 <div key={this.state.id}>
+Module n°
 <div className="mdl-data-table__cell--numeric">
 <input
   className="mdl-textfield__input halfWidth"
@@ -71,7 +90,9 @@ else
   placeholder="moduleNumber"
 />
 </div>
-<div className="mdl-data-table__cell--non-numeric">
+<br/>
+<div className="mdl-data-table__cell--numeric">
+Module title
 <input
   className="mdl-textfield__input minWidth"
   disabled={editDisabled}
@@ -82,7 +103,16 @@ else
   type="text"
   placeholder="title"
 /> </div>
+<br/>
+Module Content
+<textarea className="mdl-textfield__input moduleTextarea"
+onChange={event => this.setState(byPropKey('textContent', event.target.value))
+  }>
+  {textContent}
+</textarea>
+<br/>
 <div className="mdl-data-table__cell--non-numeric">
+YouTube Reference
 <input
   className="mdl-textfield__input minWidth"
   disabled={editDisabled}
@@ -93,31 +123,57 @@ else
   type="text"
   placeholder="YouTube Reference"
 /> </div>
+<br/>
+Homework
+<div className="homework mdl-shadow--2dp">
 <div className="mdl-data-table__cell--non-numeric">
+Homework title
 <input
   className="mdl-textfield__input minWidth"
-  disabled={true}
-  value={"Link to homework"}
-  onChange={event => this.setState(byPropKey('email', event.target.value))
+  disabled={editDisabled}
+  value={homework.title}
+  onChange={event => this.setState({homework:{title:  event.target.value}})
     }
 
   type="text"
-  placeholder="YouTube Reference"
-/> </div>
+  placeholder="homework title"
+/>
+<br/>
+Homework Content
+<textarea className="mdl-textfield__input moduleTextarea"
+disabled={editDisabled}
+onChange={event => this.setState({homework:{textContent:  event.target.value}})
+  }>
+  {homework.textContent}
+</textarea>
+<br/>
+Homework Additional Content
+<textarea className="mdl-textfield__input moduleTextarea"
+disabled={editDisabled}
+onChange={event => this.setState({homework:{additionalContent:  event.target.value}})
+  }>
+  {homework.additionalContent}
+</textarea>
+<br/>
+</div>
+</div>
+<br/><br/>
 <div>
 
 
 <button className="mdl-button mdl-js-button mdl-button--raised edit"
-onClick={()=>this.editClicked()}
+onClick={()=>this.saveModule()}
 disabled={editDisabled} type="button" >
-Edit
+Save
 </button>
+<br/><br/>
 <Link to={routes.MANAGEMODULES}>
 <button className="mdl-button mdl-js-button mdl-button--raised edit"
 
 disabled={false} type="button" >
 Back
 </button>
+<br/><br/>
 </Link>
 
 </div>

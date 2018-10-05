@@ -1,8 +1,7 @@
 import React from 'react';
 
 import AuthUserContext from './AuthUserContext';
-import {firebase} from '../firebase';
-import {db} from '../firebase';
+import {firebase,db} from '../firebase';
 
 const withAuthentication = (Component) => {
   class WithAuthentication extends React.Component {
@@ -21,6 +20,14 @@ const withAuthentication = (Component) => {
         if(authUser)
         {
           this.setState(() => ({ authUser}))
+
+          if(!this.state.users)
+          {
+          db.onceGetUsers().then(snapshot =>
+            this.setState(() => ({ users: snapshot.val() }))
+            :null);
+
+          }
          }
          else
          {
@@ -28,29 +35,41 @@ const withAuthentication = (Component) => {
         }
       } )
 
+
       }
 
     render() {
-
-      var {authUser} = this.state;
-      if(authUser)
+      var userExist= false;
+      var {authUser, users} = this.state;
+      if(users && authUser)
       {
-        if(!authUser.role)
+      Object.keys(users).map(key =>{
+      authUser.uid===key?
+        userExist=true
+        :null;
+      })
+      }
+        if(!userExist && users && authUser)
         {
-        db.onceGetUsers().then(snapshot =>
-          this.setState(() => ({ users: snapshot.val() }))
-          :null);
-          if(this.state.users && this.state.authUser)
+          const role = "participant"
+        db.doCreateUser(authUser.uid, authUser.phoneNumber, role)
+          .catch(error => {
+
+          })
+          db.doInitUser(authUser.uid)
+            .catch(error => {
+
+            })
+
+      }
+      if(this.state.users && this.state.authUser)
           {
-          Object.keys(this.state.users).map(key =>{
-          this.state.authUser.email===this.state.users[key].email?
-            this.state.authUser.role=this.state.users[key].role
+          Object.keys(users).map(key =>{
+          authUser.phoneNumber===users[key].phoneNumber?
+            authUser.role=this.state.users[key].role
             :null
-            authUser = this.state.authUser
           })
           }
-        }
-      }
 
 
         return (

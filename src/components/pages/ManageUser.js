@@ -7,8 +7,7 @@ import { db, firebase} from '../../firebase';
 
 
 const INITIAL_STATE ={
-  username: '',
-  email: '',
+  phoneNumber: '',
   role:'',
   error: null,
 };
@@ -22,12 +21,12 @@ const Search = ({ value, onChange, children }) =>
 type="text"
 value={value}
 onChange={onChange}
-placeholder={"username"}
+placeholder={"Phone Number"}
 />
 </form>
 
 const isSearched = searchTerm => item =>
-item.username.toLowerCase().includes(searchTerm.toLowerCase());
+item.phoneNumber.toLowerCase().includes(searchTerm.toLowerCase());
 
 function snapshotToArray(snapshot) {
     var returnArr = [];
@@ -132,8 +131,7 @@ this.setState({ searchTerm: event.target.value });
 
       <thead>
       <tr>
-      <th className="mdl-data-table__cell--non-numeric fullwidth">Username</th>
-      <th className="mdl-data-table__cell--non-numeric fullwidth">Email</th>
+      <th className="mdl-data-table__cell--non-numeric fullwidth">Phone Number</th>
       <th className="mdl-data-table__cell--non-numeric fullwidth">Role</th>
       <th className="mdl-data-table__cell--non-numeric fullwidth"></th>
     </tr>
@@ -192,12 +190,12 @@ this.setState({ searchTerm: event.target.value });
 
 
     editClicked() {
-      
+
     }
     render() {
       const {username,
       email,
-      role,} = this.state;
+      role,key} = this.state;
 
       return(
     <tr>
@@ -205,27 +203,17 @@ this.setState({ searchTerm: event.target.value });
     <input
       className="mdl-textfield__input minWidth"
       disabled={true}
-      value={username}
+      value={this.props.user.phoneNumber}
       onChange={event => this.setState(byPropKey('username', event.target.value))}
       type="text"
       placeholder="Username"
     /></td>
-    <td className="mdl-data-table__cell--non-numeric">
-    <input
-      className="mdl-textfield__input minWidth"
-      disabled={true}
-      value={email}
-      onChange={event => this.setState(byPropKey('email', event.target.value))
-        }
 
-      type="text"
-      placeholder="Email Address"
-    /> </td>
     <td className="mdl-data-table__cell--non-numeric">
      <select
       className="minWidth mdl-textfield__input"
       disabled={this.isInvalid}
-      value={role}
+      value={this.props.user.role}
       onChange={event => this.setState(byPropKey('role', event.target.value))
       }
       type="select"

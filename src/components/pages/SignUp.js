@@ -150,7 +150,7 @@ const SignUpPage = ({history}) =>
   <p>
     <Link to={routes.SIGN_UP}> <button className="mdl-button mdl-js-button mdl-button--raised"
        type="submit">
-    REGISTER
+    Register
     </button></Link>
   </p>
 

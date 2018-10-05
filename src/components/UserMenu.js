@@ -93,6 +93,7 @@ const AdminMenu = () =>
       <Link className="mdl-navigation__link" to={routes.HOME}  style={{ textDecoration: 'none' }}>Home Page</Link>
       <Link className="mdl-navigation__link" to={routes.ADMIN}  style={{ textDecoration: 'none' }} >Admin</Link>
       <Link className="mdl-navigation__link" to={routes.ACCOUNT}  style={{ textDecoration: 'none' }}>Account</Link>
+      <Link className="mdl-navigation__link" to={routes.CONVERSATIONLIST}  style={{ textDecoration: 'none' }}>Conversation</Link>
 </nav>
 const TherapistMenu = () =>
 <nav className="mdl-navigation">

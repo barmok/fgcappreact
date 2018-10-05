@@ -130,7 +130,9 @@ const HomeworkPage = () =>
         <h3>Thought Diary</h3>
         <div className="overflow">
         <table class=" fullwidth mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+        <div id="homework1form">
         <HomeWork1Form />
+        </div>
         </table>
         </div>
         <br/>
