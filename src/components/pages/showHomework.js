@@ -93,8 +93,10 @@ class ShowHomeworkPage extends Component {
           {
             case 0:
             HomeworkForm = () => <homeworkForms.HomeWork1Form />
+            break;
             case 1:
             HomeworkForm = () => <homeworkForms.HomeWork1Form />
+            break;
           }
         }
 

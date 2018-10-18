@@ -69,7 +69,7 @@ const UserMenu = ({history}) =>
         <AuthUserContext.Consumer>
         {authUser => authUser ?
           authUser.role==='participant'
-          ?<PatientMenu/>
+          ?<ParticipantMenu authUser={authUser}/>
           : authUser.role==='admin'?
           <AdminMenu/>
           : authUser.role==='therapist'
@@ -79,12 +79,13 @@ const UserMenu = ({history}) =>
         }
           </AuthUserContext.Consumer>
 
-const PatientMenu = () =>
+const ParticipantMenu = (auth) =>
 <nav className="mdl-navigation">
       <Link className="mdl-navigation__link" to={routes.HOME}  style={{ textDecoration: 'none' }}>Home Page</Link>
-      <Link className="mdl-navigation__link" to={routes.NEXTMODULE} style={{ textDecoration: 'none' }}>Module</Link>
+      <Link className="mdl-navigation__link" to={{pathname: routes.SHOWNEXTMODULE,state: this.state}} style={{ textDecoration: 'none' }}>Module</Link>
       <Link className="mdl-navigation__link" to={routes.REVIEWMODULES}  style={{ textDecoration: 'none' }}>Review Module</Link>
-      <Link className="mdl-navigation__link" to={routes.CONVERSATION}  style={{ textDecoration: 'none' }}>Conversation</Link>
+      <Link className="mdl-navigation__link" to={{pathname: routes.CONVERSATION,
+      state: {key:'kG9D8MJa7VRfNDcBlPeifWC8UH52' ,authUserKey:auth.authUser.uid, authUserRole:auth.authUser.role}}}  style={{ textDecoration: 'none' }}>Conversation</Link>
       <Link className="mdl-navigation__link" to={routes.ACCOUNT}  style={{ textDecoration: 'none' }}>Account</Link>
 </nav>
 

@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
-import {withRouter} from 'react-router-dom';
-import AuthUserContext from '../AuthUserContext';
 import { Link } from 'react-router-dom';
 import * as routes from '../../constants/routes';
-import SignOutButton from './SignOut';
-import withAuthorization from '../withAuthorization';
-import {auth, db, firebase} from '../../firebase';
+import EditModule from './EditModule.js';
+import withAuthorization from '../withAuthorization.js';
+import withAuthentication from '../withAuthentication.js';
+import { db} from '../../firebase';
+import  {Route} from 'react-router-dom'
+import EditModulePage from './EditModule'
+
 
 
 const INITIAL_STATE ={
@@ -13,6 +15,7 @@ const INITIAL_STATE ={
   email: '',
   role:'',
   error: null,
+  modules: null,
 };
 const byPropKey = (propertyName, value) => () => ({
   [propertyName]: value,
@@ -20,7 +23,8 @@ const byPropKey = (propertyName, value) => () => ({
 
 
 
-class ManageModulesPage extends Component {
+class ReviewModulesPage extends Component {
+  _isMounted =false
   constructor(props) {
     super(props);
     this.state = {
@@ -30,27 +34,33 @@ class ManageModulesPage extends Component {
 
 
   componentDidMount() {
+    this._isMounted =true
 
+
+  }
+  componentWillUnmount(){
+    this._isMounted =false
   }
 
   render() {
-    const{
-      history,
-    } = this.props;
-
-    <AuthUserContext.Consumer>
+    if(this.state.authUser)
     {
-
-      authUser => authUser ?
-      this.state.authUser = authUser
+      db.onceGetUsersProgress(this.state.authUser.uid).then(snapshot =>
+        this._isMounted?
+        this.setState(() => ({nModuleCompleted:snapshot.val()}))
         :null
-      }
-    </AuthUserContext.Consumer>
+      )
+    }
+
     db.onceGetModules().then(snapshot =>
+      this._isMounted?
       this.setState(() => ({ modules: snapshot.val() }))
+      :null
     );
+
     const { modules } = this.state;
     return (
+
       <div>
         {!!modules && <ModuleList modules={modules}/>}
         </div>
@@ -61,78 +71,74 @@ class ManageModulesPage extends Component {
 
 class ModuleList extends Component {
   render(){
+
     var modules = this.props.modules;
     return(
-<AuthUserContext.Consumer>
-{ authUser =>
 
   <div className="mdl-center">
     <h2>List of Completed Modules</h2>
-    <p> (Saved in Firebase Database)</p>
+    <p> </p>
     <div className="overflow">
     <table className="fullwidth mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
 
       <thead>
       <tr>
-      <th class="mdl-data-table__cell--non-numeric halfWidth">Number</th>
-      <th class="mdl-data-table__cell--non-numeric fullwidth">Name</th>
-      <th class="mdl-data-table__cell--non-numeric fullwidth">Homework</th>
-      <th class="mdl-data-table__cell--non-numeric halfWidth"></th>
+      <th className="mdl-data-table__cell--non-numeric halfWidth">Number</th>
+      <th className="mdl-data-table__cell--non-numeric fullwidth">Title</th>
+      <th className="mdl-data-table__cell--non-numeric fullwidth">Homework</th>
+      <th className="mdl-data-table__cell--non-numeric halfWidth"></th>
     </tr>
     </thead>
     <tbody>
     {Object.keys(modules).map(key =>
 
-      <EditModuleForm module={modules[key]} ukey={key} />
+      <ReviewModuleForm module={modules[key]} ukey={key} />
 
 
     )}
 
+
     </tbody>
     </table>
+    <br/>
+    <Link to={routes.HOME}>
+    <button className="mdl-button mdl-js-button mdl-button--raised edit"
+
+    disabled={false} type="button" >
+    Back
+    </button>
+
+    </Link>
+    <br/><br/>
     </div>
-    </div>
-  }
-  </AuthUserContext.Consumer>)
+    </div>)
 }
 }
 
-  class EditModuleForm extends Component {
+  class ReviewModuleForm extends Component {
     constructor(props){
       super(props);
     this.state = this.props.module;
     this.state.id=this.props.ukey;
+    this.editClicked = this.editClicked.bind(this);
     }
-    saveUser(){
-      this.isInvalid = !this.isInvalid;
-        const {
-          key,
-          username,
-          email,
-          role,
-        } = this.state;
-        const{
-          history,
-        } = this.props;
-          db.doUpdateUserRole(key,role)
-            .then(() => {
-            })
-            .catch(error => {
-              this.setState(byPropKey('error', error));
-            });
-          };
 
 
-    editClicked() {
-      this.isInvalid = !this.isInvalid;
-    }
+      editClicked()
+      {
+
+
+
+      }
+
+
     render() {
       const{ textContent,
       title,
       videoLink,
     } = this.state;
       return(
-    <tr>
+    <tr key={this.state.id}>
     <td className="mdl-data-table__cell--numeric">
     <input
       className="mdl-textfield__input halfWidth"
@@ -150,29 +156,29 @@ class ModuleList extends Component {
         }
 
       type="text"
-      placeholder="Email Address"
+      placeholder="Title"
     /> </td>
 
     <td className="mdl-data-table__cell--non-numeric">
     <input
       className="mdl-textfield__input minWidth"
       disabled={true}
-      value={"Link to homework"}
+      value={"Review homework"}
       onChange={event => this.setState(byPropKey('email', event.target.value))
         }
 
       type="text"
-      placeholder="YouTube Reference"
+      placeholder="Link to Homework"
     /> </td>
     <td>
-    <button className="mdl-button mdl-js-button mdl-button--raised edit"
-    onClick={
-      () => this.editClicked()
-    }
 
+  <Link to={{pathname: routes.REVIEWMODULE,
+  state: this.state}}>
+    <button className="mdl-button mdl-js-button mdl-button--raised edit"
     disabled={false} type="button" >
-    Edit
-    </button>
+
+    Review    </button>
+    </Link>
     </td>
     </tr>)
   }
@@ -180,6 +186,6 @@ class ModuleList extends Component {
 
 
 
-  const authCondition = (authUser) => !!authUser;
+  const authCondition = (authUser) => !!authUser && authUser.role === 'participant';
 
-export default withAuthorization(authCondition)(ManageModulesPage);
+  export default withAuthorization(authCondition)(ReviewModulesPage);

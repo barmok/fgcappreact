@@ -78,7 +78,7 @@ const Content = ({history}) =>
     <Link to={routes.NEXTMODULE}><button type="submit" className="mdl-button mdl-js-button mdl-button--raised" id="nextModule" name="next">Next Module Passive</button></Link>
     <br/><br/>
     <Link to={{pathname: routes.CONVERSATION,
-    state: {key:'hpohFFnkGLTGYpOOrusypsyt1O42' ,authUserKey:auth.authUser.uid, authUserRole:auth.authUser.role}}}><button type="submit" className="mdl-button mdl-js-button mdl-button--raised" id="emailTherapist" name="emailToTherapist">&nbsp;Message therapist&nbsp;</button></Link>
+    state: {key:'kG9D8MJa7VRfNDcBlPeifWC8UH52' ,authUserKey:auth.authUser.uid, authUserRole:auth.authUser.role}}}><button type="submit" className="mdl-button mdl-js-button mdl-button--raised" id="emailTherapist" name="emailToTherapist">&nbsp;Message therapist&nbsp;</button></Link>
 
     <br/><br/>
     <br/><br/>

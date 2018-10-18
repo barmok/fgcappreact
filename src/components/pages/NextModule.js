@@ -13,7 +13,7 @@ const NextModulePage = () =>
 <AuthUserContext.Consumer>
   {authUser =>
     <div>
-      <h1 className="hidden">Next module for:  {authUser.email}</h1>
+      <h1 className="hidden">Next module</h1>
       <div className="mdl-card__supporting-text mdl-color-text--grey-600">
 
           <h1>Module 1: Introduction</h1>

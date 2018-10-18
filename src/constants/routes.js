@@ -3,6 +3,7 @@ export const SIGN_IN = '/';
 export const SMS_CODE_CHECK = '/smscheck';
 export const HOME = '/home';
 export const REVIEWMODULES = '/reviewmodules';
+export const REVIEWMODULE = '/reviewmodule';
 export const NEXTMODULE = '/nextmodule';
 export const EDITMODULE = '/editmodule';
 export const SHOWNEXTMODULE= '/shownextmodule';

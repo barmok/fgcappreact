@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import * as routes from './constants/routes';
 import UserMenuClass from './components/UserMenu'
-import {BrowserRouter as Router, Route} from 'react-router-dom'
+import {HashRouter as Router, Route} from 'react-router-dom'
 import ManageModulesPage from './components/pages/ManageModules'
+import ReviewModulesPage from './components/pages/ReviewModules'
 import EditModulePage from './components/pages/EditModule'
 import AddModulePage from './components/pages/AddModule'
 import SignInPage from './components/pages/SignIn'
@@ -79,6 +80,7 @@ class App extends Component {
       <Route exact path={routes.CONVERSATION} component={(state) => <Conversation state={state}/>} />
       <Route exact path={routes.CONVERSATIONLIST} component={() => <TherapistConversationPage />} />
       <Route exact path={routes.SHOWNEXTMODULE} component={() => <ShowModulePage />} />
+      <Route exact path={routes.REVIEWMODULES} component={() => <ReviewModulesPage />} />
 
 
       </main>

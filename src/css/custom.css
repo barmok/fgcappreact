@@ -47,6 +47,11 @@ white-space:normal !important;
     width: 90% ;
 
 }
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
 .minWidth{
   width: 100%;
   min-width: 65px;

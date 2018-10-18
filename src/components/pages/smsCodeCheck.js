@@ -6,7 +6,12 @@ import {PasswordForgetLink} from './PasswordForget';
 import {auth, db} from '../../firebase';
 import * as firebase from 'firebase';
 import * as routes from '../../constants/routes'
-
+import {
+  BrowserView,
+  MobileView,
+  isBrowser,
+  isMobile
+} from "react-device-detect";
 
 const SmsCodeCheckPage = ({history}) =>
 <AuthUserContext.Consumer>
@@ -53,25 +58,38 @@ const SmsCodeCheckPage = ({history}) =>
       .then(()=>{
         this.setState(()=>({ ...INITIAL_STATE}));
         */
-        window.confirmationResult.confirm(smscode).then(function (result) {
-        // User signed in successfully.
+        if(isBrowser)
+        {
 
 
-        history.push(routes.HOME)
-        // ...
-      }).catch(function (error) {
-        // User couldn't sign in (bad verification code?)
-        // ...
-      });
+          window.confirmationResult.confirm(smscode).then(function (result) {
+          // User signed in successfully.
 
-      event.preventDefault();
+
+          history.push(routes.HOME)
+          // ...
+        }).catch(function (error) {
+          // User couldn't sign in (bad verification code?)
+          // ...
+        });
+
+
+        event.preventDefault();
+      }
+      if(isMobile)
+      {
+        window.cordova.plugins.firebase.auth.signInWithVerificationId(window.verificationCode, smscode).then(function(userInfo) {
+        // user is signed in
+        });
+      }
+
     }
 
     render(){
       const {
         smscode, error,
       } = this.state;
-
+      console.log(window.verificationCode);
       if(!window.confirmationResult)
       {
 
@@ -84,7 +102,7 @@ const SmsCodeCheckPage = ({history}) =>
           <input
             value={smscode}
             onChange={event => this.setState(byPropKey('smscode', event.target.value))}
-            type="text"
+            type="number"
             placeholder="SMS code"
           />
           <br />
